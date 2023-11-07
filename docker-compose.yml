@@ -16,8 +16,10 @@ services:
     container_name: certified_opinion
     ports:
       - '3000:3000'
+      - '9229:9229'
     volumes:
       - .:/app
       - /app/node_modules
+    command: npm run start:debug # override entry command
 volumes: 
   mongo_db: {}

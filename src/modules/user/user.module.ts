@@ -6,6 +6,7 @@ import { UserRepositoryAdapter } from './adapters/user.repository.adapter';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserEntity, UserSchema } from './core/models/user.entity';
 import { ErrorHandler } from 'error-handler';
+import { AuthGuard } from 'modules/auth/core/auth.guard';
 
 type NeededControllerDependencies = UserCommandRepository & UserQueryRepository;
 const neededDependencies = [UserCommandRepository, UserQueryRepository];
@@ -16,6 +17,7 @@ const neededDependencies = [UserCommandRepository, UserQueryRepository];
   providers: [
     ErrorHandler,
     UserRepositoryAdapter,
+    AuthGuard,
     {
       provide: UserCommandRepository,
       inject: [UserRepositoryAdapter],
@@ -36,6 +38,7 @@ const neededDependencies = [UserCommandRepository, UserQueryRepository];
     MongooseModule.forFeature([{ name: UserEntity.name, schema: UserSchema }]),
     ErrorHandler,
     UserRepositoryAdapter,
+    AuthGuard,
     {
       provide: UserCommandRepository,
       inject: [UserRepositoryAdapter],
