@@ -26,7 +26,7 @@ export class GuardedCompanyControllerAdapter extends CompanyControllerAdapter {
     }
   }
 
-  @Get(':id')
+  @Get('/search/:id')
   async getCompanyById(@Param('id') companyId: string): Promise<CompanyResponseDTO> {
     try {
       return await this.companyQueryRepository.findCompanyById(companyId);

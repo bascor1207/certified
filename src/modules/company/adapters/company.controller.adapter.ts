@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CompanyDTO, CompanyResponseDTO } from '../core/models/company.dto';
 import { CompanyCommandRepository } from '@company/core/command/company.command.repository';
 import { CompanyQueryRepository } from '@company/core/query/company.query.repository';
@@ -20,7 +20,7 @@ export class CompanyControllerAdapter {
     }
   }
 
-  @Post('/register')
+  @Post('/create')
   async createCompany(@Body() companyData: CompanyDTO): Promise<CompanyResponseDTO | void> {
     try {
       return await this.companyCommandRepository.createCompany(companyData);
