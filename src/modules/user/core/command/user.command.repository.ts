@@ -1,11 +1,11 @@
-import { UserDTO, UserResponseDTO } from '../models/user.dto';
+import { UserResponseDTO } from '../models/user.dto';
 import { UserEntity } from '../models/user.entity';
 import { UserCommandInterface } from './user.command.interface';
 
 export class UserCommandRepository {
   constructor(private userCommandInterface: UserCommandInterface) {}
 
-  async createUser(userData: UserDTO): Promise<UserResponseDTO | void> {
+  async createUser(userData: UserEntity): Promise<UserResponseDTO | void> {
     return await this.userCommandInterface.createUser(userData);
   }
 

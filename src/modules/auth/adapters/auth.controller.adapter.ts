@@ -7,8 +7,14 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post('login')
-  signIn(@Body() loginDTO: LoginDTO) {
-    return this.authService.signIn(loginDTO.email, loginDTO.password);
+  @Post('/user/login')
+  signInUser(@Body() loginDTO: LoginDTO) {
+    return this.authService.signInUser(loginDTO.email, loginDTO.password);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/company/login')
+  signInCompany(@Body() loginDTO: LoginDTO) {
+    return this.authService.signInCompany(loginDTO.email, loginDTO.password);
   }
 }
