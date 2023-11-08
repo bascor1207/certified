@@ -26,3 +26,8 @@ export class CompanyDTO {
 export type CompanyResponseDTO = CompanyDTO & {
   _id: unknown;
 };
+
+export type CompanyWithTokenResponseDTO = {
+  company: CompanyResponseDTO;
+  access_token: string;
+};

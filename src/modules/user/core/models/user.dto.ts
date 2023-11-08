@@ -22,3 +22,8 @@ export class UserDTO {
 export type UserResponseDTO = UserDTO & {
   _id: unknown;
 };
+
+export type UserWithTokenResponseDTO = {
+  user: UserResponseDTO;
+  access_token: string;
+};
