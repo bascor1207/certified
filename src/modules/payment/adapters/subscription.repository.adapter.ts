@@ -4,17 +4,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { SubscriptionCommandInterface } from '../core/command/subscription.command.interface';
 import { SubscriptionEntity } from '../core/models/subscription.entity';
 import { SubscriptionResponseDTO } from '../core/models/subscription.dto';
-import { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_KEY } from '../utils/configStripe';
+import { STRIPE_WEBHOOK_KEY } from '../utils/configStripe';
 import { Body } from '@nestjs/common';
+import { SubscriptionService } from '../core/subscription.service';
 
 export class SubscriptionRepositoryAdapter implements SubscriptionCommandInterface {
   private stripe;
 
-  constructor(@InjectModel('SubscriptionEntity') private readonly mongoDB: Model<SubscriptionEntity>) {
-    this.stripe = new Stripe(STRIPE_SECRET_KEY, {
-      apiVersion: '2023-10-16',
-    });
-  }
+  constructor(
+    @InjectModel('SubscriptionEntity') private readonly mongoDB: Model<SubscriptionEntity>,
+    private readonly suscriptionService: SubscriptionService,
+  ) {}
 
   //WRITE
   async createSubscription(companyId: string): Promise<void | SubscriptionResponseDTO> {
@@ -23,40 +23,12 @@ export class SubscriptionRepositoryAdapter implements SubscriptionCommandInterfa
     subscriptionData.companyId = companyId;
     const subscription = new this.mongoDB(subscriptionData);
     try {
-      const sub = await this.createPaymentIntent(subscription.id, 5000, 'eur');
+      const sub = await this.suscriptionService.createPaymentIntent(subscription.id, 5000, 'eur');
       console.log(sub);
       return await subscription.save();
     } catch (error) {
       console.error('Payment Intent creation failed with error :', error);
       throw error;
-    }
-  }
-
-  async createPaymentIntent(
-    subscriptionId: string,
-    amount: number,
-    currency: string,
-    paymentMethodOptions?: object,
-  ): Promise<Stripe.PaymentIntent> {
-    const params: Stripe.PaymentIntentCreateParams = {
-      amount,
-      currency,
-      payment_method_types: ['card'],
-      metadata: {
-        subscriptionId,
-      },
-    };
-
-    if (paymentMethodOptions) {
-      params.payment_method_options = paymentMethodOptions;
-    }
-
-    try {
-      const paymentIntent = await this.stripe.paymentIntents.create(params);
-      return paymentIntent;
-    } catch (error) {
-      console.error('Error creating payment intent:', error);
-      throw new Error('Stripe payment intent creation failed.');
     }
   }
 
