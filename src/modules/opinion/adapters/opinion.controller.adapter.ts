@@ -5,7 +5,7 @@ import { OpinionEntity } from '../core/models/opnion.entity';
 import { OpinionQueryRepository } from '../core/query/opinion.query.repository';
 
 @Controller('opinions')
-export class CompanyControllerAdapter {
+export class OpinionControllerAdapter {
   constructor(
     readonly opinionCommandRepository: OpinionCommandRepository,
     readonly opinionQueryRepository: OpinionQueryRepository,
