@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Post, Req, Res, UseGuards, Param } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { AuthGuard } from 'modules/auth/core/auth.guard';
 import { SubscriptionControllerAdapter } from 'modules/payment/adapters/subscription.controller.adapter';
@@ -12,8 +12,8 @@ export class GuardedSubscriptionControllerAdapter extends SubscriptionController
     super(subscriptionCommandRepository);
   }
 
-  @Post('')
-  async createSubscription(@Body() companyId: string): Promise<void | SubscriptionResponseDTO> {
+  @Post(':id')
+  async createSubscription(@Param('id') companyId: string): Promise<void | SubscriptionResponseDTO> {
     try {
       return await this.subscriptionCommandRepository.createCompany(companyId);
     } catch (error) {
