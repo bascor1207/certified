@@ -33,7 +33,7 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
 
   async findOpinionsByIdCompany(companyId: string): Promise<OpinionResponseDTO[]> {
     try {
-      return await this.mongoDB.findOne({ companyId: companyId });
+      return await this.mongoDB.find({ companyId: companyId }).exec();
     } catch (error) {
       return error;
     }
@@ -41,7 +41,7 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
 
   async findOpinionsByIdUser(userId: string): Promise<OpinionResponseDTO[]> {
     try {
-      return await this.mongoDB.findOne({ userId: userId });
+      return await this.mongoDB.find({ userId: userId }).exec();
     } catch (error) {
       return error;
     }
@@ -52,13 +52,13 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
       const company = await this.mongoDBCompany.findById(companyId);
       switch (company.level) {
         case 0:
-          return await this.mongoDB.findOne({ companyId: companyId }).limit(50);
+          return await this.mongoDB.find({ companyId: companyId }).limit(50).exec();
         case 1:
-          return await this.mongoDB.findOne({ companyId: companyId }).limit(150);
+          return await this.mongoDB.find({ companyId: companyId }).limit(150).exec();
         case 2:
-          return await this.mongoDB.findOne({ companyId: companyId }).limit(250);
+          return await this.mongoDB.find({ companyId: companyId }).limit(250).exec();
         case 3:
-          return await this.mongoDB.findOne({ companyId: companyId });
+          return await this.mongoDB.find({ companyId: companyId });
       }
     } catch (error) {
       return error;
