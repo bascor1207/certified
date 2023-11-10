@@ -23,8 +23,7 @@ export class SubscriptionRepositoryAdapter implements SubscriptionCommandInterfa
     subscriptionData.companyId = companyId;
     const subscription = new this.mongoDB(subscriptionData);
     try {
-      const sub = await this.suscriptionService.createPaymentIntent(subscription.id, 5000, 'eur');
-      console.log(sub);
+      await this.suscriptionService.createPaymentIntent(subscription.id, 5000, 'eur');
       return await subscription.save();
     } catch (error) {
       console.error('Payment Intent creation failed with error :', error);
