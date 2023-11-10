@@ -3,7 +3,6 @@ import { AuthGuard } from 'modules/auth/core/auth.guard';
 import { OpinionControllerAdapter } from 'modules/opinion/adapters/opinion.controller.adapter';
 import { OpinionCommandRepository } from 'modules/opinion/core/command/opinion.command.repository';
 import { OpinionResponseDTO, OpinionDTO } from 'modules/opinion/core/models/opinion.dto';
-import { OpinionEntity } from 'modules/opinion/core/models/opnion.entity';
 import { OpinionQueryRepository } from 'modules/opinion/core/query/opinion.query.repository';
 
 @UseGuards(AuthGuard)

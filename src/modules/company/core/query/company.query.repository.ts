@@ -16,4 +16,8 @@ export class CompanyQueryRepository {
   async findCompanyByEmail(email: string): Promise<CompanyResponseDTO> {
     return await this.companyQueryInterface.findCompanyByEmail(email);
   }
+
+  async findCompanyByName(name: string): Promise<CompanyResponseDTO> {
+    return await this.companyQueryInterface.findCompanyByName(name);
+  }
 }

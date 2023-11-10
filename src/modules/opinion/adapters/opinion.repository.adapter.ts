@@ -32,7 +32,7 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
 
   async findOpinionsByIdCompany(companyId: string): Promise<OpinionResponseDTO[]> {
     try {
-      return await this.mongoDB.findOne({ companyId: companyId });
+      return await this.mongoDB.findOne({ companyId: companyId }).exec();
     } catch (error) {
       return error;
     }
@@ -40,7 +40,7 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
 
   async findOpinionsByIdUser(userId: string): Promise<OpinionResponseDTO[]> {
     try {
-      return await this.mongoDB.findOne({ userId: userId });
+      return await this.mongoDB.findOne({ userId: userId }).exec();
     } catch (error) {
       return error;
     }

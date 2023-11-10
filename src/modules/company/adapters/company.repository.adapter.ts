@@ -37,6 +37,14 @@ export class CompanyRepositoryAdapter implements CompanyCommandInterface, Compan
     }
   }
 
+  async findCompanyByName(name: string): Promise<CompanyResponseDTO> {
+    try {
+      return await this.mongoDB.findOne({ name }).exec();
+    } catch (error) {
+      return error;
+    }
+  }
+
   //WRITE
   async createCompany(companyData: CompanyEntity): Promise<CompanyResponseDTO | void> {
     try {
