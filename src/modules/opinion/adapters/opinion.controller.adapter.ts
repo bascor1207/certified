@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { OpinionCommandRepository } from '../core/command/opinion.command.repository';
 import { OpinionDTO, OpinionResponseDTO } from '../core/models/opinion.dto';
-import { OpinionEntity } from '../core/models/opnion.entity';
 import { OpinionQueryRepository } from '../core/query/opinion.query.repository';
 
 @Controller('opinions')
@@ -12,7 +11,7 @@ export class OpinionControllerAdapter {
   ) {}
 
   @Get('')
-  async getAllCompanys(): Promise<OpinionEntity[]> {
+  async getAllOpinions(): Promise<OpinionResponseDTO[]> {
     try {
       return await this.opinionQueryRepository.getOpinions();
     } catch (error) {
@@ -20,8 +19,8 @@ export class OpinionControllerAdapter {
     }
   }
 
-  @Post('/register')
-  async createCompany(@Body() opinionData: OpinionDTO): Promise<OpinionResponseDTO | void> {
+  @Post('/create')
+  async createOpinion(@Body() opinionData: OpinionDTO): Promise<OpinionResponseDTO | void> {
     try {
       return await this.opinionCommandRepository.createOpinion(opinionData);
     } catch (error) {

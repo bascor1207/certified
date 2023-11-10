@@ -21,8 +21,3 @@ export class OpinionDTO {
 export type OpinionResponseDTO = OpinionDTO & {
   _id: unknown;
 };
-
-export type OpinionWithTokenResponseDTO = {
-  company: OpinionResponseDTO;
-  access_token: string;
-};

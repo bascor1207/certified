@@ -30,6 +30,22 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
     }
   }
 
+  async findOpinionsByIdCompany(companyId: string): Promise<OpinionResponseDTO[]> {
+    try {
+      return await this.mongoDB.findById(companyId);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async findOpinionsByIdUser(userId: string): Promise<OpinionResponseDTO[]> {
+    try {
+      return await this.mongoDB.findById(userId);
+    } catch (error) {
+      return error;
+    }
+  }
+
   //WRITE
   async createOpinion(opinionData: OpinionEntity): Promise<OpinionResponseDTO | void> {
     try {

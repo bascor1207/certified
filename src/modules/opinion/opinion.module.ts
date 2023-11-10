@@ -51,4 +51,4 @@ const neededDependencies = [OpinionCommandRepository, OpinionQueryRepository];
     },
   ],
 })
-export class CompanyModule {}
+export class OpinionModule {}
