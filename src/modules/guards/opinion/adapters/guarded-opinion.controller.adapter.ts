@@ -42,6 +42,15 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     }
   }
 
+  @Get(':id/level')
+  async getOpinionsByLevelCompany(@Param('id') companyId: string): Promise<OpinionResponseDTO[]> {
+    try {
+      return await this.opinionQueryRepository.findOpinionsByLevelComapny(companyId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Get(':id')
   async getOpinionsByIdUser(@Param('id') userId: string): Promise<OpinionResponseDTO[]> {
     try {

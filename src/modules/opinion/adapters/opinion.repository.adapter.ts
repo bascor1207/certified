@@ -10,6 +10,7 @@ import { OpinionQueryInterface } from '../core/query/opinion.query.interface';
 export class OpinionRepositoryAdapter implements OpinionCommandInterface, OpinionQueryInterface {
   constructor(
     @InjectModel('OpinionEntity') private readonly mongoDB: Model<OpinionEntity>,
+    @InjectModel('CompanyEntity') private readonly mongoDBCompany: Model<CompanyEntity>,
     private readonly customError: ErrorHandler,
   ) {}
 
@@ -32,7 +33,7 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
 
   async findOpinionsByIdCompany(companyId: string): Promise<OpinionResponseDTO[]> {
     try {
-      return await this.mongoDB.findOne({ companyId: companyId }).exec();
+      return await this.mongoDB.findOne({ companyId: companyId });
     } catch (error) {
       return error;
     }
@@ -40,7 +41,25 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
 
   async findOpinionsByIdUser(userId: string): Promise<OpinionResponseDTO[]> {
     try {
-      return await this.mongoDB.findOne({ userId: userId }).exec();
+      return await this.mongoDB.findOne({ userId: userId });
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async findOpinionsByLevelComapny(companyId: string): Promise<OpinionResponseDTO[]> {
+    try {
+      const company = await this.mongoDBCompany.findById(companyId);
+      switch (company.level) {
+        case 0:
+          return await this.mongoDB.findOne({ companyId: companyId }).limit(50);
+        case 1:
+          return await this.mongoDB.findOne({ companyId: companyId }).limit(150);
+        case 2:
+          return await this.mongoDB.findOne({ companyId: companyId }).limit(250);
+        case 3:
+          return await this.mongoDB.findOne({ companyId: companyId });
+      }
     } catch (error) {
       return error;
     }

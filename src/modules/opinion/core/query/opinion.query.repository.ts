@@ -19,4 +19,8 @@ export class OpinionQueryRepository {
   async findOpinionsByIdUser(userId: string): Promise<OpinionResponseDTO[]> {
     return await this.opinionQueryInterface.findOpinionsByIdUser(userId);
   }
+
+  async findOpinionsByLevelComapny(companyId: string): Promise<OpinionResponseDTO[]> {
+    return await this.opinionQueryInterface.findOpinionsByLevelComapny(companyId);
+  }
 }
