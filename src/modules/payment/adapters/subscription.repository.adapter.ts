@@ -7,12 +7,14 @@ import { SubscriptionResponseDTO } from '../core/models/subscription.dto';
 import { STRIPE_WEBHOOK_KEY } from '../utils/configStripe';
 import { Body } from '@nestjs/common';
 import { SubscriptionService } from '../core/subscription.service';
+import { CompanyEntity } from '@company/core/models/company.entity';
 
 export class SubscriptionRepositoryAdapter implements SubscriptionCommandInterface {
   private stripe;
 
   constructor(
-    @InjectModel('SubscriptionEntity') private readonly mongoDB: Model<SubscriptionEntity>,
+    @InjectModel('SubscriptionEntity') private readonly mongoDBSubscription: Model<SubscriptionEntity>,
+    @InjectModel('CompanyEntity') private readonly mongoDBCompany: Model<CompanyEntity>,
     private readonly suscriptionService: SubscriptionService,
   ) {}
 
@@ -21,7 +23,7 @@ export class SubscriptionRepositoryAdapter implements SubscriptionCommandInterfa
     const subscriptionData = new SubscriptionEntity();
     subscriptionData.active = false;
     subscriptionData.companyId = companyId;
-    const subscription = new this.mongoDB(subscriptionData);
+    const subscription = new this.mongoDBSubscription(subscriptionData);
     try {
       await this.suscriptionService.createPaymentIntent(subscription.id, 5000, 'eur');
       return await subscription.save();
@@ -50,11 +52,28 @@ export class SubscriptionRepositoryAdapter implements SubscriptionCommandInterfa
         const { subscriptionId } = pi.metadata;
         if (!subscriptionId) throw new Error('No subscription Id Defined');
 
-        const subscription = await this.mongoDB.findOne({ where: { id: subscriptionId } });
+        const subscription = await this.mongoDBSubscription.findOne({ where: { id: subscriptionId } });
         if (!subscription) throw new Error('No Subscription found');
 
+        const company = await this.mongoDBCompany.findById({ where: { id: subscription.companyId } });
+
+        /*switch (pi.amount) {
+          case 5:
+            company.level = 1;
+            break;
+          case 10:
+            company.level = 2;
+            break;
+          case 20:
+            company.level = 3;
+            break;
+        }*/
+        company.level = 1;
+        const updatedCompany = this.mongoDBCompany.updateOne({ where: { id: subscription.companyId }, data: company });
+        console.log(updatedCompany);
+
         subscription.active = true;
-        const updatedSubscription = this.mongoDB.updateOne({ where: { id: subscriptionId }, data: subscription });
+        const updatedSubscription = this.mongoDBSubscription.updateOne({ where: { id: subscriptionId }, data: subscription });
         if (!updatedSubscription) throw new Error('Error while updating subscription');
         break;
 
