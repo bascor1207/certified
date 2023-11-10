@@ -5,17 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from 'modules/shared.module';
 import { SubscriptionEntity, SubscriptionSchema } from './core/models/subscription.entity';
 import { SubscriptionRepositoryAdapter } from './adapters/subscription.repository.adapter';
+import { SubscriptionService } from './core/subscription.service';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: SubscriptionEntity.name, schema: SubscriptionSchema }]), SharedModule],
   controllers: [SubscriptionControllerAdapter],
   providers: [
     SubscriptionRepositoryAdapter,
-    {
-      provide: SubscriptionCommandRepository,
-      inject: [SubscriptionRepositoryAdapter],
-      useFactory: (subscriptionRepository: SubscriptionRepositoryAdapter) => new SubscriptionCommandRepository(subscriptionRepository),
-    },
+    SubscriptionService,
     {
       provide: SubscriptionCommandRepository,
       inject: [SubscriptionRepositoryAdapter],
@@ -27,11 +24,6 @@ import { SubscriptionRepositoryAdapter } from './adapters/subscription.repositor
     SubscriptionRepositoryAdapter,
     {
       provide: SubscriptionCommandRepository,
-      inject: [SubscriptionRepositoryAdapter],
-      useFactory: (subscriptionRepository: SubscriptionRepositoryAdapter) => new SubscriptionCommandRepository(subscriptionRepository),
-    },
-    {
-      provide: SubscriptionControllerAdapter,
       inject: [SubscriptionRepositoryAdapter],
       useFactory: (subscriptionRepository: SubscriptionRepositoryAdapter) => new SubscriptionCommandRepository(subscriptionRepository),
     },

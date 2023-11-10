@@ -1,6 +1,8 @@
 import Stripe from 'stripe';
 import { STRIPE_SECRET_KEY } from '../utils/configStripe';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class SubscriptionService {
   private stripe;
 
