@@ -34,8 +34,8 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     }
   }
 
-  @Get(':idCompany')
-  async getOpinionsByIdCompany(@Param('idCompany') companyId: string): Promise<OpinionResponseDTO[]> {
+  @Get(':id')
+  async getOpinionsByIdCompany(@Param('id') companyId: string): Promise<OpinionResponseDTO[]> {
     try {
       return await this.opinionQueryRepository.findOpinionsByIdCompany(companyId);
     } catch (error) {
@@ -43,8 +43,8 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     }
   }
 
-  @Get(':idUser')
-  async getOpinionsByIdUser(@Param('idUser') userId: string): Promise<OpinionResponseDTO[]> {
+  @Get(':id')
+  async getOpinionsByIdUser(@Param('id') userId: string): Promise<OpinionResponseDTO[]> {
     try {
       return await this.opinionQueryRepository.findOpinionsByIdUser(userId);
     } catch (error) {
