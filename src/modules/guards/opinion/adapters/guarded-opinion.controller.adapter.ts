@@ -1,4 +1,4 @@
-import { UseGuards, Controller, Get, Param, Put, Body, Delete } from '@nestjs/common';
+import { UseGuards, Controller, Get, Param, Put, Body, Delete, Post } from '@nestjs/common';
 import { AuthGuard } from 'modules/auth/core/auth.guard';
 import { OpinionControllerAdapter } from 'modules/opinion/adapters/opinion.controller.adapter';
 import { OpinionCommandRepository } from 'modules/opinion/core/command/opinion.command.repository';
@@ -13,6 +13,15 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     readonly opinionQueryRepository: OpinionQueryRepository,
   ) {
     super(opinionCommandRepository, opinionQueryRepository);
+  }
+
+  @Post('/createByCompany')
+  async createOpinion(@Body() opinionData: OpinionDTO): Promise<OpinionResponseDTO | void> {
+    try {
+      return await this.opinionCommandRepository.createOpinionByCompany(opinionData);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Get('')
