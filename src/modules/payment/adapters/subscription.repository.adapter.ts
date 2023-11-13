@@ -57,7 +57,7 @@ export class SubscriptionRepositoryAdapter implements SubscriptionCommandInterfa
 
         const company = await this.mongoDBCompany.findById({ where: { id: subscription.companyId } });
 
-        /*switch (pi.amount) {
+        switch (pi.amount) {
           case 5:
             company.level = 1;
             break;
@@ -67,7 +67,7 @@ export class SubscriptionRepositoryAdapter implements SubscriptionCommandInterfa
           case 20:
             company.level = 3;
             break;
-        }*/
+        }
         company.level = 1;
         const updatedCompany = this.mongoDBCompany.updateOne({ where: { id: subscription.companyId }, data: company });
         console.log(updatedCompany);

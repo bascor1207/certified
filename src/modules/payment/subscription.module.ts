@@ -6,9 +6,16 @@ import { SharedModule } from 'modules/shared.module';
 import { SubscriptionEntity, SubscriptionSchema } from './core/models/subscription.entity';
 import { SubscriptionRepositoryAdapter } from './adapters/subscription.repository.adapter';
 import { SubscriptionService } from './core/subscription.service';
+import { CompanyEntity, CompanySchema } from '@company/core/models/company.entity';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: SubscriptionEntity.name, schema: SubscriptionSchema }]), SharedModule],
+  imports: [
+    MongooseModule.forFeature([
+      { name: SubscriptionEntity.name, schema: SubscriptionSchema },
+      { name: CompanyEntity.name, schema: CompanySchema },
+    ]),
+    SharedModule,
+  ],
   controllers: [SubscriptionControllerAdapter],
   providers: [
     SubscriptionRepositoryAdapter,
