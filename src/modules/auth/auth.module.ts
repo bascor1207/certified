@@ -7,6 +7,7 @@ import { AuthGuards } from './core/auth.guard';
 import { jwtSecret } from './auth.constant';
 import { CompanyModule } from '@company/company.module';
 import { SharedModule } from 'modules/shared.module';
+import { SubscriptionModule } from 'modules/payment/subscription.module';
 import { OpinionModule } from 'modules/opinion/opinion.module';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
@@ -18,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
     SharedModule,
     UserModule,
     CompanyModule,
+    SubscriptionModule,
     OpinionModule,
     JwtModule.register({
       global: true,
@@ -26,7 +28,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [JwtService, AuthService, AuthGuards],
-  exports: [UserModule, CompanyModule, OpinionModule, AuthGuards, SharedModule],
+  providers: [JwtService, AuthService, AuthGuard],
+  exports: [UserModule, CompanyModule, SubscriptionModule, AuthGuard, SharedModule],
 })
 export class AuthModule {}
