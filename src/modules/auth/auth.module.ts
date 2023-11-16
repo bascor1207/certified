@@ -28,7 +28,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [JwtService, AuthService, AuthGuard],
-  exports: [UserModule, CompanyModule, SubscriptionModule, AuthGuard, SharedModule],
+  providers: [JwtService, AuthService, AuthGuards],
+  exports: [UserModule, CompanyModule, SubscriptionModule, AuthGuards, SharedModule, OpinionModule],
 })
 export class AuthModule {}

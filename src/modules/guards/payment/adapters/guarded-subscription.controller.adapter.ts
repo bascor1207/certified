@@ -1,21 +1,30 @@
-import { Controller, Post, Req, Res, UseGuards, Param } from '@nestjs/common';
-import { Response, Request } from 'express';
-import { AuthGuard } from 'modules/auth/core/auth.guard';
+import { Controller, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { AuthGuards } from 'modules/auth/core/auth.guard';
 import { SubscriptionControllerAdapter } from 'modules/payment/adapters/subscription.controller.adapter';
 import { SubscriptionCommandRepository } from 'modules/payment/core/command/subscription.command.repository';
 import { SubscriptionResponseDTO } from 'modules/payment/core/models/subscription.dto';
+import { ApiKeyService } from '../../../apikey/adapters/api-key.service';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuards)
 @Controller('subscription')
 export class GuardedSubscriptionControllerAdapter extends SubscriptionControllerAdapter {
-  constructor(readonly subscriptionCommandRepository: SubscriptionCommandRepository) {
-    super(subscriptionCommandRepository);
+  constructor(
+    readonly subscriptionCommandRepository: SubscriptionCommandRepository,
+    private readonly apiKeyService: ApiKeyService,
+  ) {
+    super();
   }
 
   @Post(':id')
-  async createSubscription(@Param('id') companyId: string): Promise<void | SubscriptionResponseDTO> {
+  async createSubscription(@Param('id') companyId: string): Promise<any | (SubscriptionResponseDTO & { apiKey: string })> {
     try {
-      return await this.subscriptionCommandRepository.createCompany(companyId);
+      const apiKey = await this.apiKeyService.subscribe(companyId);
+      const subscription = await this.subscriptionCommandRepository.createCompany(companyId);
+      if (subscription) {
+        const { _id, companyId, active } = subscription;
+        return { _id, apiKey, companyId, active };
+      }
     } catch (error) {
       throw error;
     }

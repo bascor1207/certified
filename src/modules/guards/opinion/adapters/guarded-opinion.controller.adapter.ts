@@ -1,18 +1,11 @@
 import { UseGuards, Controller, Get, Param, Put, Body, Delete, Post } from '@nestjs/common';
-import { AuthGuard } from 'modules/auth/core/auth.guard';
+import { AuthGuards } from 'modules/auth/core/auth.guard';
 import { OpinionControllerAdapter } from 'modules/opinion/adapters/opinion.controller.adapter';
 import { OpinionCommandRepository } from 'modules/opinion/core/command/opinion.command.repository';
 import { OpinionResponseDTO, OpinionDTO } from 'modules/opinion/core/models/opinion.dto';
 import { OpinionQueryRepository } from 'modules/opinion/core/query/opinion.query.repository';
-import {
-  ApiTags,
-  ApiResponse,
-  ApiOperation,
-  ApiParam,
-  ApiOkResponse,
-  ApiBadRequestResponse,
-  ApiBody
-} from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiOperation, ApiParam, ApiOkResponse, ApiBadRequestResponse, ApiBody } from '@nestjs/swagger';
+import { ApiKeyGuards } from '../../../apikey/core/api-key.guard';
 
 @ApiTags('Opinions')
 @UseGuards(AuthGuards)
@@ -95,6 +88,7 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     }
   }
 
+  @UseGuards(ApiKeyGuards)
   @Get(':id/level')
   async getOpinionsByLevelCompany(@Param('id') companyId: string): Promise<OpinionResponseDTO[]> {
     try {

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get } from '@nestjs/common';
 import { OpinionCommandRepository } from '../core/command/opinion.command.repository';
 import { OpinionDTO, OpinionResponseDTO } from '../core/models/opinion.dto';
 import { OpinionQueryRepository } from '../core/query/opinion.query.repository';
+import { ApiKeyGuards } from '../../apikey/core/api-key.guard';
 
 @Controller('opinions')
 export class OpinionControllerAdapter {
@@ -10,19 +11,20 @@ export class OpinionControllerAdapter {
     readonly opinionQueryRepository: OpinionQueryRepository,
   ) {}
 
-  @Get('')
-  async getAllOpinions(): Promise<OpinionResponseDTO[]> {
-    try {
-      return await this.opinionQueryRepository.getOpinions();
-    } catch (error) {
-      return error;
-    }
-  }
-
   @Post('/create')
   async createOpinion(@Body() opinionData: OpinionDTO): Promise<OpinionResponseDTO | void> {
     try {
       return await this.opinionCommandRepository.createOpinion(opinionData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @UseGuards(ApiKeyGuards)
+  @Get('/test')
+  test(): string {
+    try {
+      return 'hello';
     } catch (error) {
       throw error;
     }

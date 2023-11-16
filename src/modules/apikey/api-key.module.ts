@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ApiKeyGuards } from './core/api-key.guard';
 import { jwtSecret } from '../auth/auth.constant';
-import { ApiKeyController } from './adapters/api-key.controller.adapter';
 import { CompanyModule } from '@company/company.module';
 import { ApiKeyService } from './adapters/api-key.service';
 
@@ -11,11 +10,11 @@ import { ApiKeyService } from './adapters/api-key.service';
     CompanyModule,
     JwtModule.register({
       global: true,
-      signOptions: { expiresIn: '10y' },
+      signOptions: { expiresIn: '2 days' },
       secret: jwtSecret.secret,
     }),
   ],
-  controllers: [ApiKeyController],
+  controllers: [],
   providers: [JwtService, ApiKeyGuards, ApiKeyService],
 })
 export class ApiKeyModule {}
