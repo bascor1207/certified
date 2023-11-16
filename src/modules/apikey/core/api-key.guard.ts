@@ -1,10 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 import { JwtService } from '@nestjs/jwt';
-import { jwtSecret } from '../auth.constant';
+import { jwtSecret } from '../../auth/auth.constant';
 
 @Injectable()
-export class AuthGuards implements CanActivate {
+export class ApiKeyGuards implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

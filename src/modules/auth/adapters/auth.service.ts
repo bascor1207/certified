@@ -8,7 +8,7 @@ import { UserWithTokenResponseDTO } from '@user/core/models/user.dto';
 import { UserCommandRepository } from '@user/core/command/user.command.repository';
 import { CompanyEntity } from '@company/core/models/company.entity';
 import { CompanyCommandRepository } from '@company/core/command/company.command.repository';
-import { CompanyWithTokenResponseDTO } from '@company/core/models/company.dto';
+import { CompanyDTO, CompanyWithTokenResponseDTO } from '@company/core/models/company.dto';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,12 @@ export class AuthService {
   ) {}
 
   async createUser(userData: UserEntity): Promise<UserWithTokenResponseDTO | void> {
-    const user = await this.userCommandRepository.createUser(userData);
+    let user;
+    try {
+      user = await this.userCommandRepository.createUser(userData);
+    } catch (error) {
+      return error;
+    }
     if (!user) {
       throw new BadRequestException();
     }
@@ -32,14 +37,18 @@ export class AuthService {
   }
 
   async createCompany(companyData: CompanyEntity): Promise<CompanyWithTokenResponseDTO | void> {
-    const company = await this.companyCommandRepository.createCompany(companyData);
-    if (!company) {
-      throw new BadRequestException();
+    try {
+      const company = await this.companyCommandRepository.createCompany(companyData);
+      if (!company) {
+        throw new BadRequestException();
+      }
+      const payload = { sub: company, companyName: company.name };
+      const access_token = await this.jwtService.signAsync(payload, { secret: jwtSecret.secret });
+      const returnedCompany = { company, access_token };
+      return returnedCompany;
+    } catch (error) {
+      return error;
     }
-    const payload = { sub: company, companyName: company.name };
-    const access_token = await this.jwtService.signAsync(payload, { secret: jwtSecret.secret });
-    const returnedCompany = { company, access_token };
-    return returnedCompany;
   }
 
   async signInUser(email: string, pass: string): Promise<UserWithTokenResponseDTO | void> {
@@ -62,5 +71,10 @@ export class AuthService {
     const access_token = await this.jwtService.signAsync(payload, { secret: jwtSecret.secret });
     const returnedCompany = { company, access_token };
     return returnedCompany;
+  }
+
+  async subscribe(companyDTO: CompanyDTO): Promise<any> {
+    const company = await this.companyQueryRepository.findCompanyByEmail(companyDTO.email);
+    console.log(company);
   }
 }

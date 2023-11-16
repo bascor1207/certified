@@ -13,7 +13,7 @@ export class CompanyRepositoryAdapter implements CompanyCommandInterface, Compan
   ) {}
 
   //READ
-  async getCompanys(): Promise<CompanyResponseDTO[]> {
+  async getCompanies(): Promise<CompanyResponseDTO[]> {
     try {
       return await this.mongoDB.find().exec();
     } catch (error) {
@@ -32,6 +32,15 @@ export class CompanyRepositoryAdapter implements CompanyCommandInterface, Compan
   async findCompanyByEmail(email: string): Promise<CompanyResponseDTO> {
     try {
       return await this.mongoDB.findOne({ email }).exec();
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async findCompanyByName(name: string): Promise<CompanyResponseDTO> {
+    try {
+      console.log(name);
+      return await this.mongoDB.findOne({ name }).exec();
     } catch (error) {
       return error;
     }
