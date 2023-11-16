@@ -21,7 +21,7 @@ export class GuardedSubscriptionControllerAdapter extends SubscriptionController
     }
   }
 
-  @Post('/webhook')
+  @Post('/webhook/payment')
   async handleStripeHook(@Req() req: Request, @Res() res: Response) {
     try {
       this.subscriptionCommandRepository.handleWebHook(req.body, (req.headers['stripe-signature'] as string) || '');
