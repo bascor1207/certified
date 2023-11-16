@@ -6,12 +6,19 @@ import { OpinionRepositoryAdapter } from './adapters/opinion.repository.adapter'
 import { OpinionCommandRepository } from './core/command/opinion.command.repository';
 import { OpinionEntity, OpinionSchema } from './core/models/opnion.entity';
 import { OpinionQueryRepository } from './core/query/opinion.query.repository';
+import { CompanyEntity, CompanySchema } from '@company/core/models/company.entity';
 
 type NeededControllerDependencies = OpinionCommandRepository & OpinionQueryRepository;
 const neededDependencies = [OpinionCommandRepository, OpinionQueryRepository];
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: OpinionEntity.name, schema: OpinionSchema }]), SharedModule],
+  imports: [
+    MongooseModule.forFeature([
+      { name: OpinionEntity.name, schema: OpinionSchema },
+      { name: CompanyEntity.name, schema: CompanySchema },
+    ]),
+    SharedModule,
+  ],
   controllers: [OpinionControllerAdapter],
   providers: [
     OpinionRepositoryAdapter,

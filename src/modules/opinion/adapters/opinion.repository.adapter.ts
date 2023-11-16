@@ -10,6 +10,7 @@ import { OpinionQueryInterface } from '../core/query/opinion.query.interface';
 export class OpinionRepositoryAdapter implements OpinionCommandInterface, OpinionQueryInterface {
   constructor(
     @InjectModel('OpinionEntity') private readonly mongoDB: Model<OpinionEntity>,
+    @InjectModel('CompanyEntity') private readonly mongoDBCompany: Model<CompanyEntity>,
     private readonly customError: ErrorHandler,
   ) {}
 
@@ -32,7 +33,7 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
 
   async findOpinionsByIdCompany(companyId: string): Promise<OpinionResponseDTO[]> {
     try {
-      return await this.mongoDB.findOne({ companyId: companyId });
+      return await this.mongoDB.find({ companyId: companyId }).exec();
     } catch (error) {
       return error;
     }
@@ -40,7 +41,29 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
 
   async findOpinionsByIdUser(userId: string): Promise<OpinionResponseDTO[]> {
     try {
-      return await this.mongoDB.findOne({ userId: userId });
+      return await this.mongoDB.find({ userId: userId }).exec();
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async findOpinionsByLevelComapny(companyId: string): Promise<OpinionResponseDTO[]> {
+    try {
+      const company = await this.mongoDBCompany.findById(companyId);
+      switch (company.level) {
+        case 0:
+          console.log('0', company.level);
+          return await this.mongoDB.find({ companyId: companyId }).limit(50).exec();
+        case 1:
+          console.log('1', company.level);
+          return await this.mongoDB.find({ companyId: companyId }).limit(150).exec();
+        case 2:
+          console.log('2', company.level);
+          return await this.mongoDB.find({ companyId: companyId }).limit(250).exec();
+        case 3:
+          console.log('3', company.level);
+          return await this.mongoDB.find({ companyId: companyId });
+      }
     } catch (error) {
       return error;
     }
@@ -49,12 +72,26 @@ export class OpinionRepositoryAdapter implements OpinionCommandInterface, Opinio
   //WRITE
   async createOpinion(opinionData: OpinionEntity): Promise<OpinionResponseDTO | void> {
     try {
-      const isCompanyAlreayInDB = await this.mongoDB.findOne({ userId: opinionData.userId }).exec();
-      if (isCompanyAlreayInDB) {
+      const isOpinionAlreayInDB = await this.mongoDB.findOne({ userId: opinionData.userId }).exec();
+      if (isOpinionAlreayInDB) {
         return this.customError.badRequest('Opinion already registered, please connect');
       }
-      const newCompany = new this.mongoDB(opinionData);
-      return await newCompany.save();
+      const newOpinion = new this.mongoDB(opinionData);
+      return await newOpinion.save();
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async createOpinionByCompany(opinionData: OpinionEntity): Promise<OpinionResponseDTO | void> {
+    try {
+      const company = await this.mongoDBCompany.findById(opinionData.companyId);
+      if (company.level == 3) {
+        const newOpinion = new this.mongoDB(opinionData);
+        return await newOpinion.save();
+      } else {
+        return this.customError.badRequest('The company do not have required level.');
+      }
     } catch (error) {
       return error;
     }

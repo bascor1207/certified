@@ -5,4 +5,5 @@ export interface OpinionQueryInterface {
   findOpinionById(opinionId: string): Promise<OpinionResponseDTO>;
   findOpinionsByIdCompany(companyId: string): Promise<OpinionResponseDTO[]>;
   findOpinionsByIdUser(userId: string): Promise<OpinionResponseDTO[]>;
+  findOpinionsByLevelComapny(companyId: string): Promise<OpinionResponseDTO[]>;
 }
