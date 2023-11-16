@@ -8,7 +8,7 @@ import { UserWithTokenResponseDTO } from '@user/core/models/user.dto';
 import { UserCommandRepository } from '@user/core/command/user.command.repository';
 import { CompanyEntity } from '@company/core/models/company.entity';
 import { CompanyCommandRepository } from '@company/core/command/company.command.repository';
-import { CompanyWithTokenResponseDTO } from '@company/core/models/company.dto';
+import { CompanyDTO, CompanyWithTokenResponseDTO } from '@company/core/models/company.dto';
 
 @Injectable()
 export class AuthService {
@@ -62,5 +62,10 @@ export class AuthService {
     const access_token = await this.jwtService.signAsync(payload, { secret: jwtSecret.secret });
     const returnedCompany = { company, access_token };
     return returnedCompany;
+  }
+
+  async subscribe(companyDTO: CompanyDTO): Promise<any> {
+    const company = await this.companyQueryRepository.findCompanyByEmail(companyDTO.email);
+    console.log(company);
   }
 }

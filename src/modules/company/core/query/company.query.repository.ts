@@ -5,8 +5,8 @@ import { CompanyQueryInterface } from './company.query.interface';
 export class CompanyQueryRepository {
   constructor(private readonly companyQueryInterface: CompanyQueryInterface) {}
 
-  async getCompanys(): Promise<CompanyEntity[]> {
-    return await this.companyQueryInterface.getCompanys();
+  async getCompanies(): Promise<CompanyEntity[]> {
+    return await this.companyQueryInterface.getCompanies();
   }
 
   async findCompanyById(companyId: string): Promise<CompanyResponseDTO> {
