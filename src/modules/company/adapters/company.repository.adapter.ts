@@ -13,7 +13,7 @@ export class CompanyRepositoryAdapter implements CompanyCommandInterface, Compan
   ) {}
 
   //READ
-  async getCompanys(): Promise<CompanyResponseDTO[]> {
+  async getCompanies(): Promise<CompanyResponseDTO[]> {
     try {
       return await this.mongoDB.find().exec();
     } catch (error) {

@@ -4,8 +4,18 @@ import { OpinionControllerAdapter } from 'modules/opinion/adapters/opinion.contr
 import { OpinionCommandRepository } from 'modules/opinion/core/command/opinion.command.repository';
 import { OpinionResponseDTO, OpinionDTO } from 'modules/opinion/core/models/opinion.dto';
 import { OpinionQueryRepository } from 'modules/opinion/core/query/opinion.query.repository';
+import {
+  ApiTags,
+  ApiResponse,
+  ApiOperation,
+  ApiParam,
+  ApiOkResponse,
+  ApiBadRequestResponse,
+  ApiBody
+} from '@nestjs/swagger';
 
-@UseGuards(AuthGuard)
+@ApiTags('Opinions')
+@UseGuards(AuthGuards)
 @Controller('opinions')
 export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
   constructor(
@@ -25,6 +35,19 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
   }
 
   @Get('')
+  @ApiOperation({ summary: 'Get all opinions' })
+  @ApiOkResponse({
+    description: 'The opinions records',
+    type: 'OpinionResponseDTO',
+    isArray: true,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No opinions can be found',
+  })
+  @ApiBadRequestResponse({
+    description: 'No opinions can be found because missing token',
+  })
   async getAllOpinions(): Promise<OpinionResponseDTO[]> {
     try {
       return await this.opinionQueryRepository.getOpinions();
@@ -34,6 +57,16 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a specific opinion by ID' })
+  @ApiParam({ name: 'id', description: 'Opinion ID', type: String })
+  @ApiOkResponse({
+    description: 'Opinion found successfully',
+    type: 'OpinionResponseDTO',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Opinion cannot be found',
+  })
   async getOpinionById(@Param('id') opinionId: string): Promise<OpinionResponseDTO> {
     try {
       return await this.opinionQueryRepository.findOpinionById(opinionId);
@@ -42,7 +75,18 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     }
   }
 
-  @Get(':id')
+  @Get('company/:id')
+  @ApiOperation({ summary: 'Get opinions by Company ID' })
+  @ApiParam({ name: 'id', description: 'Company ID', type: String })
+  @ApiOkResponse({
+    description: 'Opinions found successfully',
+    type: 'OpinionResponseDTO',
+    isArray: true,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Opinions cannot be found for the given Company ID',
+  })
   async getOpinionsByIdCompany(@Param('id') companyId: string): Promise<OpinionResponseDTO[]> {
     try {
       return await this.opinionQueryRepository.findOpinionsByIdCompany(companyId);
@@ -60,7 +104,18 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     }
   }
 
-  @Get(':id')
+  @Get('user/:id')
+  @ApiOperation({ summary: 'Get opinions by User ID' })
+  @ApiParam({ name: 'id', description: 'User ID', type: String })
+  @ApiOkResponse({
+    description: 'Opinions found successfully',
+    type: 'OpinionResponseDTO',
+    isArray: true,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Opinions cannot be found for the given User ID',
+  })
   async getOpinionsByIdUser(@Param('id') userId: string): Promise<OpinionResponseDTO[]> {
     try {
       return await this.opinionQueryRepository.findOpinionsByIdUser(userId);
@@ -70,7 +125,21 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
   }
 
   @Put(':id')
-  async updateCompanyById(
+  @ApiOperation({ summary: 'Update an opinion by ID' })
+  @ApiParam({ name: 'id', description: 'Opinion ID', type: String })
+  @ApiBody({ type: OpinionDTO })
+  @ApiOkResponse({
+    description: 'Opinion updated successfully',
+    type: 'OpinionResponseDTO',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Opinion cannot be found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Opinion cannot be updated, please try again',
+  })
+  async updateOpinionById(
     @Param('id') opinionId: string,
     @Body() opinionDataToUpdate: Partial<OpinionDTO>,
   ): Promise<OpinionResponseDTO> {
@@ -82,6 +151,19 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete an opinion by ID' })
+  @ApiParam({ name: 'id', description: 'Opinion ID', type: String })
+  @ApiResponse({
+    status: 204,
+    description: 'Opinion deleted successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Opinion cannot be found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Opinion cannot be deleted, please try again',
+  })
   async deleteOpinionById(@Param('id') opinionId: string): Promise<void> {
     try {
       return await this.opinionCommandRepository.deleteOpinionById(opinionId);
