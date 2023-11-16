@@ -10,7 +10,7 @@ import { ApiKeyService } from './adapters/api-key.service';
     CompanyModule,
     JwtModule.register({
       global: true,
-      signOptions: { expiresIn: '2 days' },
+      signOptions: { expiresIn: '1y' },
       secret: jwtSecret.secret,
     }),
   ],
