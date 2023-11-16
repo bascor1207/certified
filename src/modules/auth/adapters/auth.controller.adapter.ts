@@ -22,7 +22,7 @@ export class AuthController {
     try {
       return await this.authService.createUser(userData);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -38,7 +38,7 @@ export class AuthController {
     try {
       return await this.authService.createCompany(companyData);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -64,17 +64,5 @@ export class AuthController {
   @Post('/company/login')
   signInCompany(@Body() loginDTO: LoginDTO) {
     return this.authService.signInCompany(loginDTO.email, loginDTO.password);
-  }
-
-  @ApiCreatedResponse({
-    description: 'Company successfully subscribed !',
-  })
-  @ApiBadRequestResponse({
-    description: 'Company cannot subscribe please try again',
-  })
-  @HttpCode(HttpStatus.OK)
-  @Post('/company/subscribe')
-  subscribeToProgram(@Body() companyDTO: CompanyDTO) {
-    return this.authService.subscribe(companyDTO);
   }
 }

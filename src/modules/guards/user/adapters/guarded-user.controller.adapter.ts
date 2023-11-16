@@ -41,7 +41,7 @@ export class GuardedUserControllerAdapter extends UserControllerAdapter {
     try {
       return await this.userQueryRepository.getUsers();
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -59,7 +59,7 @@ export class GuardedUserControllerAdapter extends UserControllerAdapter {
     try {
       return await this.userQueryRepository.findUserById(userId);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -81,7 +81,7 @@ export class GuardedUserControllerAdapter extends UserControllerAdapter {
     try {
       return await this.userCommandRepository.findUserByIdAndUpdateData(userId, userDataToUpdate);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -103,7 +103,7 @@ export class GuardedUserControllerAdapter extends UserControllerAdapter {
     try {
       return await this.userCommandRepository.deleteUserById(userId);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -121,7 +121,7 @@ export class GuardedUserControllerAdapter extends UserControllerAdapter {
     try {
       return await this.userCommandRepository.findUserByIdAndChangePassword(userId, value);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 }

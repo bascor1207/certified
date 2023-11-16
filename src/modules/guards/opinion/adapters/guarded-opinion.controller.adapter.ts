@@ -71,7 +71,7 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     try {
       return await this.opinionQueryRepository.findOpinionById(opinionId);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -91,7 +91,7 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     try {
       return await this.opinionQueryRepository.findOpinionsByIdCompany(companyId);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -120,7 +120,7 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     try {
       return await this.opinionQueryRepository.findOpinionsByIdUser(userId);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -146,7 +146,7 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     try {
       return await this.opinionCommandRepository.findOpinionByIdAndUpdateData(opinionId, opinionDataToUpdate);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -168,7 +168,7 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
     try {
       return await this.opinionCommandRepository.deleteOpinionById(opinionId);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 }

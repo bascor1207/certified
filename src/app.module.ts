@@ -7,6 +7,7 @@ import { GuardedUserModule } from 'modules/guards/user/guarded-user.module';
 import { GuardedCompanyModule } from 'modules/guards/company/guarded-company.module';
 import { GuardedOpinionModule } from 'modules/guards/opinion/guarded-opinion.module';
 import { APP_GUARD } from '@nestjs/core';
+import { ApiKeyModule } from './modules/apikey/api-key.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { APP_GUARD } from '@nestjs/core';
     GuardedUserModule,
     GuardedCompanyModule,
     GuardedOpinionModule,
+    ApiKeyModule,
   ],
   controllers: [AppController],
   providers: [

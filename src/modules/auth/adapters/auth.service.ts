@@ -21,7 +21,12 @@ export class AuthService {
   ) {}
 
   async createUser(userData: UserEntity): Promise<UserWithTokenResponseDTO | void> {
-    const user = await this.userCommandRepository.createUser(userData);
+    let user;
+    try {
+      user = await this.userCommandRepository.createUser(userData);
+    } catch (error) {
+      return error;
+    }
     if (!user) {
       throw new BadRequestException();
     }
@@ -32,14 +37,18 @@ export class AuthService {
   }
 
   async createCompany(companyData: CompanyEntity): Promise<CompanyWithTokenResponseDTO | void> {
-    const company = await this.companyCommandRepository.createCompany(companyData);
-    if (!company) {
-      throw new BadRequestException();
+    try {
+      const company = await this.companyCommandRepository.createCompany(companyData);
+      if (!company) {
+        throw new BadRequestException();
+      }
+      const payload = { sub: company, companyName: company.name };
+      const access_token = await this.jwtService.signAsync(payload, { secret: jwtSecret.secret });
+      const returnedCompany = { company, access_token };
+      return returnedCompany;
+    } catch (error) {
+      return error;
     }
-    const payload = { sub: company, companyName: company.name };
-    const access_token = await this.jwtService.signAsync(payload, { secret: jwtSecret.secret });
-    const returnedCompany = { company, access_token };
-    return returnedCompany;
   }
 
   async signInUser(email: string, pass: string): Promise<UserWithTokenResponseDTO | void> {

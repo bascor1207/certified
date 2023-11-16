@@ -55,7 +55,7 @@ export class GuardedCompanyControllerAdapter extends CompanyControllerAdapter {
     try {
       return await this.companyQueryRepository.findCompanyById(companyId);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -91,7 +91,7 @@ export class GuardedCompanyControllerAdapter extends CompanyControllerAdapter {
     try {
       return await this.companyCommandRepository.findCompanyByIdAndUpdateData(companyId, companyDataToUpdate);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -113,7 +113,7 @@ export class GuardedCompanyControllerAdapter extends CompanyControllerAdapter {
     try {
       return await this.companyCommandRepository.deleteCompanyById(companyId);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -131,7 +131,7 @@ export class GuardedCompanyControllerAdapter extends CompanyControllerAdapter {
     try {
       return await this.companyCommandRepository.findCompanyByIdAndChangePassword(companyId, value);
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 }

@@ -10,7 +10,6 @@ import { SharedModule } from 'modules/shared.module';
 import { OpinionModule } from 'modules/opinion/opinion.module';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
-import { HeaderApiKeyStrategy } from './core/api-key.guard';
 
 @Module({
   imports: [
@@ -27,7 +26,7 @@ import { HeaderApiKeyStrategy } from './core/api-key.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [JwtService, AuthService, AuthGuards, HeaderApiKeyStrategy],
-  exports: [UserModule, CompanyModule, OpinionModule, AuthGuards, SharedModule, HeaderApiKeyStrategy],
+  providers: [JwtService, AuthService, AuthGuards],
+  exports: [UserModule, CompanyModule, OpinionModule, AuthGuards, SharedModule],
 })
 export class AuthModule {}
