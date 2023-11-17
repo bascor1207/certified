@@ -16,22 +16,22 @@ export class AppSeeder implements Seeder {
 
   async seed() {
     const users = DataFactory.createForClass(UserEntity).generate(10);
-    const companys = DataFactory.createForClass(CompanyEntity).generate(10);
+    const companies = DataFactory.createForClass(CompanyEntity).generate(10);
     const opinions = DataFactory.createForClass(OpinionEntity).generate(10);
 
     console.log(users);
-    console.log(companys);
+    console.log(companies);
     console.log(opinions);
 
     // Insert into the database.
-    this.user.insertMany(users);
-    this.company.insertMany(companys);
-    this.opinion.insertMany(opinions);
+    await this.user.insertMany(users);
+    await this.company.insertMany(companies);
+    await this.opinion.insertMany(opinions);
   }
 
   async drop() {
-    this.user.deleteMany({});
-    this.company.deleteMany({});
-    this.opinion.deleteMany({});
+    await this.user.deleteMany({});
+    await this.company.deleteMany({});
+    await this.opinion.deleteMany({});
   }
 }
