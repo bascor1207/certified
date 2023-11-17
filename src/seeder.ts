@@ -7,7 +7,7 @@ import { OpinionEntity, OpinionSchema } from 'modules/opinion/core/models/opnion
 
 seeder({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nestjs-seeder-sample'),
+    MongooseModule.forRoot('mongodb://mongo_db:27017/certified_opinions'),
     MongooseModule.forFeature([{ name: UserEntity.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: CompanyEntity.name, schema: CompanySchema }]),
     MongooseModule.forFeature([{ name: OpinionEntity.name, schema: OpinionSchema }]),
