@@ -60,6 +60,16 @@ export class GuardedCompanyControllerAdapter extends CompanyControllerAdapter {
   }
 
   @Get(':name/search')
+  @ApiOperation({ summary: 'Get a specific company by NAME' })
+  @ApiParam({ name: 'name', description: 'Company NAME', type: String })
+  @ApiOkResponse({
+    description: 'Company found successfully',
+    type: 'CompanyResponseDTO',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Company cannot be found',
+  })
   async getCompanyByName(@Param('name') name: string): Promise<CompanyResponseDTO> {
     try {
       console.log(name);

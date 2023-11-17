@@ -19,6 +19,19 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
   }
 
   @Post('/createByCompany')
+  @ApiOperation({ summary: 'Create an opinion' })
+  @ApiBody({ type: OpinionDTO })
+  @ApiOkResponse({
+    description: 'Opinion created successfully',
+    type: 'OpinionResponseDTO',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Opinion cannot be found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Opinion cannot be updated, please try again',
+  })
   async createOpinion(@Body() opinionData: OpinionDTO): Promise<OpinionResponseDTO | void> {
     try {
       return await this.opinionCommandRepository.createOpinionByCompany(opinionData);
@@ -90,6 +103,17 @@ export class GuardedOpinionControllerAdapter extends OpinionControllerAdapter {
 
   @UseGuards(ApiKeyGuards)
   @Get(':id/level')
+  @ApiOperation({ summary: 'Get opinions by Company LEVEL' })
+  @ApiParam({ name: 'id', description: 'Company ID', type: String })
+  @ApiOkResponse({
+    description: 'Opinions found successfully',
+    type: 'OpinionResponseDTO',
+    isArray: true,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Opinions cannot be found for the given Company ID',
+  })
   async getOpinionsByLevelCompany(@Param('id') companyId: string): Promise<OpinionResponseDTO[]> {
     try {
       return await this.opinionQueryRepository.findOpinionsByLevelComapny(companyId);
